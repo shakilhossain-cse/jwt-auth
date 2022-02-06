@@ -15,7 +15,7 @@ const User = new Schema({
         type:String,
         required:true,
     },
-    emailVarification: {
+    emailVarificationToken: {
         type:String,
         default:""
     },
