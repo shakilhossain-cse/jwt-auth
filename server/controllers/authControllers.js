@@ -2,6 +2,7 @@ const bcrypt = require("bcryptjs");
 const User = require("../models/User");
 
 const tokenGenerator = require("../config/createToken");
+const emailSender = require("../config/sendEmail");
 
 const registerController = async (req, res) => {
   const { name, email, password } = req.body;
@@ -26,10 +27,27 @@ const registerController = async (req, res) => {
         email,
         password: hashPassword,
       });
-      
-      console.log("token", tokenGenerator({email:newUser.email}));
       await newUser.save();
-      res.status(200).json({ success: true, msg: "Registered Successfully" });
+      // genarate token
+      const token = tokenGenerator({ email: newUser.email });
+      // send email
+      const link = req.hostname + "4000/api/email/varify?token" + token;
+      const sendMail = await emailSender(newUser.email, link);
+      if (!sendMail) {
+        res
+          .status(200)
+          .json({
+            success: true,
+            msg: "Registered Successfully . Something went wrong  for sending varification mail",
+          });
+      } else {
+        res
+          .status(200)
+          .json({
+            success: true,
+            msg: "Registered Successfully . Your varification mail send your email",
+          });
+      }
     });
   });
 };
