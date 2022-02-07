@@ -4,11 +4,10 @@ const transporter = nodemailer.createTransport({
   host: "smtp.ethereal.email",
   port: 587,
   auth: {
-    user: "zachery.johnson66@ethereal.email",
-    pass: "BdBUmxuME6yZjbabpu",
+    user: "oda.hermann96@ethereal.email",
+    pass: "GhrYwAubkW9FwgJT4z",
   },
 });
-
 module.exports = async (senderEmail, link) => {
   let error = false;
   try {
