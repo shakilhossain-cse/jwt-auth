@@ -5,6 +5,7 @@ const {
   registerController,
   loginController,
   forgetPasswordController,
+  resetPasswordController,
 } = require("../controllers/authControllers");
 const verifyTokenController = require("../controllers/verifyTokenController");
 
@@ -16,4 +17,7 @@ router.post("/login", loginController);
 router.post("/forgetpassword", forgetPasswordController);
 // verify forget password route
 router.get("/verifyToken", verifyTokenController);
+// reset password 
+router.get('/resetpassword', resetPasswordController);
+
 module.exports = router;

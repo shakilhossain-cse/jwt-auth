@@ -35,7 +35,7 @@ const registerController = async (req, res) => {
       const token = tokenGenerator({ email: newUser.email });
       // send email
       const link =
-        "http://" + req.hostname + ":4000/api/email/varify?token" + token;
+        "http://" + req.hostname + ":4000/api/email/varify?token=" + token;
       const sendMail = await sendVerificationEmail(newUser.email, link);
 
       if (!sendMail) {
@@ -108,8 +108,51 @@ const forgetPasswordController = async (req, res) => {
     });
   }
 };
+const resetPasswordController = async (req, res) => {
+  const { email, oldPassword, newPassword, confirmPassword } = req.body;
+  if (!email || !oldPassword || !newPassword || !confirmPassword) {
+    return res
+      .status(400)
+      .json({ success: false, msg: "All feild is required" });
+  }
+  const oldUser = await User.findOneK({ email });
+  if (!oldUser) {
+    return res.status(400).json({ success: false, msg: "user not found" });
+  }
+  if (newPassword !== confirmPassword) {
+    return res
+      .status(400)
+      .json({ success: false, msg: "You password is not match" });
+  }
+  bcrypt.genSalt(10, (err, salt) => {
+    bcrypt.hash(newPassword, salt, async (err, hash) => {
+      const hashPassword = hash;
+
+      const updateData = await User.findOneAndUpdate(
+        { email },
+        {
+          $set: {
+            password: hashPassword,
+          },
+        }
+      );
+      if (updateData) {
+        res.status(200).json({
+          success: true,
+          msg: "Your password update successfully",
+        });
+      } else {
+        res.status(500).json({
+          success: false,
+          msg: "someting went wrong ",
+        });
+      }
+    });
+  });
+};
 module.exports = {
   registerController,
   loginController,
   forgetPasswordController,
+  resetPasswordController,
 };

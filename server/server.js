@@ -2,6 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const bodyParser = require("body-parser");
 const authAPI = require("./apis/authApi");
+const emailApi = require("./apis/emailApi");
 const app = express();
 const port = process.env.PORT || 4000;
 const dbConnect = require("./config/dbConnect");
@@ -15,6 +16,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/auth", authAPI);
+app.use("/api/email", emailApi);
 
 app.listen(port, () => {
   console.log("server started on " + port);
