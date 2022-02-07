@@ -7,6 +7,7 @@ const {
   sendRorgetPasswordEmail,
 } = require("../config/sendEmail");
 
+// register controller
 const registerController = async (req, res) => {
   const { name, email, password } = req.body;
   if (!name || !email || !password) {
@@ -53,6 +54,7 @@ const registerController = async (req, res) => {
   });
 };
 
+// login controller
 const loginController = async (req, res) => {
   const { email, password } = req.body;
   if (!email || !password) {
@@ -77,6 +79,8 @@ const loginController = async (req, res) => {
     .status(200)
     .json({ success: true, token, msg: "You are login successfully" });
 };
+
+// forger password controller
 const forgetPasswordController = async (req, res) => {
   const { email } = req.body;
   if (!email) {
@@ -108,6 +112,8 @@ const forgetPasswordController = async (req, res) => {
     });
   }
 };
+
+// reset password controller
 const resetPasswordController = async (req, res) => {
   const { email, oldPassword, newPassword, confirmPassword } = req.body;
   if (!email || !oldPassword || !newPassword || !confirmPassword) {
